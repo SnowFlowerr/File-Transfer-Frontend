@@ -7,6 +7,7 @@ export default function Home() {
     const [text, setText] = useState("")
     const [img, setImg] = useState("")
     const [err, setErr] = useState("")
+    const [isSend, setisSend] = useState(false)
     
     function handleChange(e) {
         e.preventDefault();
@@ -21,6 +22,7 @@ export default function Home() {
                 setText(e.target.value)
             }
             setErr("")
+            setisSend(true)
         }
         catch(err){
             setErr(err.message)
@@ -28,6 +30,19 @@ export default function Home() {
     }
     async function sendFile(e) {
         e.preventDefault();
+        setisSend(()=>false)
+        if(!file){
+            setErr("Enter The file")
+            return
+        }
+        else if(!name){
+            setErr("Enter The Name")
+            return
+        }
+        else if(!text){
+            setErr("Enter The Text")
+            return
+        }
         const formData=new FormData()
         formData.append('file',file)
         formData.append('name',name)
@@ -50,7 +65,7 @@ export default function Home() {
                 <input type="file" id='file' onChange={handleChange} /> <br />
                 <input type="text" id='name' placeholder="Enter Your Name" onChange={handleChange}/><br />
                 <textarea id="text" placeholder='Enter Your Text' onChange={handleChange}></textarea> <br />
-                <button onClick={sendFile}>Send</button>
+                {isSend && <button onClick={sendFile}>Send</button>}
             </form>
             <div>
                 <div>{file?.name}</div>
