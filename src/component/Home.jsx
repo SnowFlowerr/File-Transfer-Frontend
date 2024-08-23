@@ -51,8 +51,6 @@ export default function Home() {
                 <div>{file.size && "bytes"}</div>
             </div>
             
-                {name}
-                {text}
                 {err&&err}
                 <a href={img?.image}>{img?.image}</a>
                 <img src={img?.image} alt="" width="100%"/>
