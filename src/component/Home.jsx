@@ -23,6 +23,7 @@ export default function Home() {
             }
             setErr("")
             setisSend(true)
+            setImg("")
         }
         catch(err){
             setErr(err.message)
@@ -70,13 +71,16 @@ export default function Home() {
             <div>
                 <div>{file?.name}</div>
                 <div>{file?.type}</div>
+                <div>{file?.duration}</div>
                 <div>{file?.size && file?.size + " bytes"}</div>
             </div>
             
             <div style={{color:"red"}}>{err&&err}</div>
                 
                 <a href={img?.image}>{img?.image}</a>
-                <img src={img?.image} alt="" width="100%"/>
+                <br />
+                <img src={img?.image} alt="" />
+                <video src={img?.image} autoPlay controls width={"400px"}></video>
         </div>
     )
 }
