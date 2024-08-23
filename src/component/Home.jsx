@@ -10,14 +10,20 @@ export default function Home() {
     
     function handleChange(e) {
         e.preventDefault();
-        if(e.target.id==='file'){
-            setFile(e.target.files[0])
+        try{
+            if(e.target.id==='file'){
+                setFile(e.target.files[0])
+            }
+            else if(e.target.id==='name'){
+                setName(e.target.value)
+            }
+            else if(e.target.id==='text'){
+                setText(e.target.value)
+            }
+            setErr("")
         }
-        else if(e.target.id==='name'){
-            setName(e.target.value)
-        }
-        else if(e.target.id==='text'){
-            setText(e.target.value)
+        catch(err){
+            setErr(err.message)
         }
     }
     async function sendFile(e) {
@@ -27,9 +33,10 @@ export default function Home() {
         formData.append('name',name)
         formData.append('text',text)
         try{
-            const data=await axios.post('http://localhost:800/formData/data',formData)
+            const data=await axios.post('https://file-transfer-backend-production.up.railway.app/formData/data',formData)
             setImg(data?.data)
-            console.log(data.data)
+            // console.log(data.data)
+            setErr("")
         }
         catch(err){
             setErr(err.message)
@@ -38,7 +45,7 @@ export default function Home() {
 
     }
     return (
-        <div>
+        <div style={{wordWrap:"break-word"}}>
             <form action="" onSubmit={sendFile}>
                 <input type="file" id='file' onChange={handleChange} /> <br />
                 <input type="text" id='name' placeholder="Enter Your Name" onChange={handleChange}/><br />
@@ -46,12 +53,13 @@ export default function Home() {
                 <button onClick={sendFile}>Send</button>
             </form>
             <div>
-                <div>{file.name}</div>
-                <div>{file.type}</div>
-                <div>{file.size && "bytes"}</div>
+                <div>{file?.name}</div>
+                <div>{file?.type}</div>
+                <div>{file?.size && file?.size + " bytes"}</div>
             </div>
             
-                {err&&err}
+            <div style={{color:"red"}}>{err&&err}</div>
+                
                 <a href={img?.image}>{img?.image}</a>
                 <img src={img?.image} alt="" width="100%"/>
         </div>
