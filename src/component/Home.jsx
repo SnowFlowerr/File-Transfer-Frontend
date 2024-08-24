@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import "./styles.css"
 
 export default function Home() {
     const [file, setFile] = useState("")
@@ -8,6 +9,7 @@ export default function Home() {
     const [img, setImg] = useState("")
     const [err, setErr] = useState("")
     const [isSend, setisSend] = useState(false)
+    const [isProg, setisProg] = useState(false)
     
     function handleChange(e) {
         e.preventDefault();
@@ -32,6 +34,7 @@ export default function Home() {
     async function sendFile(e) {
         e.preventDefault();
         setisSend(()=>false)
+        setisProg(()=>true)
         if(!file){
             setErr("Enter The file")
             return
@@ -49,10 +52,11 @@ export default function Home() {
         formData.append('name',name)
         formData.append('text',text)
         try{
-            const data=await axios.post('https://file-transfer-backend-production.up.railway.app/formData/data',formData)
+            const data=await axios.post('http://localhost:800/formData/data',formData)
             setImg(data?.data)
             // console.log(data.data)
             setErr("")
+            setisProg(()=>false)
         }
         catch(err){
             setErr(err.message)
@@ -79,8 +83,16 @@ export default function Home() {
                 
                 <a href={img?.image}>{img?.image}</a>
                 <br />
+                {isProg&&
+                <div className='process'></div>
+                }
+                <br />
+                {
+                    !isProg&&<>
                 <img src={img?.image} alt="" />
                 <video src={img?.image} autoPlay controls width={"400px"}></video>
+                </>
+                }
         </div>
     )
 }
